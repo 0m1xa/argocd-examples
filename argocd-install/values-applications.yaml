@@ -18,9 +18,41 @@ argo-cd:
       syncPolicy:
         automated:
           prune: true
+          selfHeal: true
         syncOptions:
         - CreateNamespace=true
-
+    - name: argocd-apps
+      namespace: argocd
+      destination:
+        namespace: argocd
+        server: https://kubernetes.default.svc
+      project: argocd
+      source:
+        path: argocd-apps
+        repoURL: https://github.com/0m1xa/argocd-examples.git
+        targetRevision: HEAD
+        directory:
+          recurse: true
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+    - name: argocd-appprojects
+      namespace: argocd
+      destination:
+        namespace: argocd
+        server: https://kubernetes.default.svc
+      project: argocd
+      source:
+        path: argocd-projects
+        repoURL: https://github.com/0m1xa/argocd-examples.git
+        targetRevision: HEAD
+        directory:
+          recurse: true
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
     # - name: guestbook
     #   namespace: client1-argo
     #   additionalLabels: {}
