@@ -9,6 +9,8 @@ argo-cd:
           version: v3
           valueFiles:
           - values-override.yaml
+          - values-applications.yaml
+          - values-projects.yaml
         path: argocd-install
         repoURL: https://github.com/0m1xa/argocd-examples.git
         targetRevision: HEAD
