@@ -1,0 +1,50 @@
+argo-cd:
+  server:
+    additionalProjects:
+    - name: argocd
+      namespace: argocd
+      description: Argocd Project
+      sourceRepos:
+      - '*'
+      destinations:
+      - namespace: argocd
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      orphanedResources:
+        warn: false
+#     - name: client1-project-1
+#       namespace: client1-argo
+#       additionalLabels: {}
+#       additionalAnnotations: {}
+#       finalizers: []
+#       description: Example Project
+#       sourceRepos:
+#       - '*'
+#       destinations:
+#       - namespace: client1-argo-ns1
+#         server: https://kubernetes.default.svc
+#       namespaceResourceWhitelist:
+#       - group: '*'
+#         kind: '*'
+#       clusterResourceWhitelist:
+#       - group: ''
+#         kind: Namespace
+#     - name: client1-project-2
+#       namespace: client1-argo
+#       additionalLabels: {}
+#       additionalAnnotations: {}
+#       finalizers: []
+#       description: Example Project
+#       sourceRepos:
+#       - '*'
+#       destinations:
+#       - namespace: client1-argo-ns2
+#         server: https://kubernetes.default.svc
+#       namespaceResourceWhitelist:
+#       - group: '*'
+#         kind: '*'
+#       clusterResourceWhitelist:
+#       - group: ''
+#         kind: Namespace

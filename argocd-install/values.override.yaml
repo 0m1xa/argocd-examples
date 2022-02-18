@@ -1,0 +1,55 @@
+argo-cd:
+  global:
+    image:
+      repository: quay.io/argoproj/argocd
+      tag: "v2.2.5"
+  server:
+    extraArgs:
+    - --insecure
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      labels: {}
+      ingressClassName: ""
+      hosts:
+        - super-argo.example.com
+
+      # -- List of ingress paths
+      paths:
+        - /
+      # -- Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
+      pathType: Prefix
+      # -- Additional ingress paths
+      extraPaths:
+        []
+      tls:
+        []
+      https: false
+    config:
+      # Add users
+      accounts.image-updater: apiKey
+      # Argo CD's externally facing base URL (optional). Required when configuring SSO
+      url: http://super-argo.example.com
+      # Argo CD instance label key
+      application.instanceLabelKey: argocd.argoproj.io/instance
+      # VaultPlugin
+      # configManagementPlugins: |-
+      #   - name: argocd-vault-plugin-clientdemo
+      #     generate:
+      #       command: ["argocd-vault-plugin"]
+      #       args: ["generate", "-s", "argocd-vault-plugin-clientdemo", "./"]
+      #   - name: argocd-vault-plugin-clientdemo-helm
+      #     init:
+      #       command: ["sh", "-c"]
+      #       args: ["helm dependency build"]
+      #     generate:
+      #       command: ["sh", "-c"]
+      #       args: ["helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE . | argocd-vault-plugin generate -s argocd-vault-plugin-clientdemo:argocd230rc -"]
+    rbacConfig:
+      policy.csv: |
+        p, role:image-updater, applications, get, */*, allow
+        p, role:image-updater, applications, update, */*, allow
+        g, image-updater, role:image-updater

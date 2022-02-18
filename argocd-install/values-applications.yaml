@@ -1,0 +1,71 @@
+argo-cd:
+  server:
+    additionalApplications:
+    - name: argocd
+      namespace: argocd
+      project: argocd
+      source:
+        helm:
+          version: v3
+          valueFiles:
+          - values-override.yaml
+        path: argocd-install
+        repoURL: https://github.com/0m1xa/argocd-examples.git
+        targetRevision: HEAD
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+        syncOptions:
+        - CreateNamespace=true
+
+    # - name: guestbook
+    #   namespace: client1-argo
+    #   additionalLabels: {}
+    #   additionalAnnotations: {}
+    #   finalizers: []
+    #   project: client1-project-1
+    #   source:
+    #     repoURL: https://github.com/argoproj/argocd-example-apps.git
+    #     targetRevision: HEAD
+    #     path: guestbook
+    #     directory:
+    #       recurse: true
+    #   destination:
+    #     server: https://kubernetes.default.svc
+    #     namespace: client1-argo-ns1
+    #   syncPolicy:
+    #     automated:
+    #       prune: true
+    #     syncOptions:
+    #     - CreateNamespace=true
+    #   ignoreDifferences:
+    #   - group: apps
+    #     kind: Deployment
+    #     jsonPointers:
+    #     - /spec/replicas
+    #   info:
+    #   - name: url
+    #     value: https://argoproj.github.io/
+    # - name: helm-hooks
+    #   namespace: client1-argo
+    #   additionalLabels: {}
+    #   additionalAnnotations: {}
+    #   finalizers: []
+    #   project: client1-project-2
+    #   source:
+    #     repoURL: https://github.com/argoproj/argocd-example-apps.git
+    #     targetRevision: HEAD
+    #     path: helm-hooks
+    #     directory:
+    #       recurse: true
+    #   destination:
+    #     server: https://kubernetes.default.svc
+    #     namespace: client1-argo-ns2
+    #   syncPolicy:
+    #     automated:
+    #       prune: true
+    #     syncOptions:
+    #     - CreateNamespace=true
